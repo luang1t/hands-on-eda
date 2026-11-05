@@ -1,0 +1,44 @@
+{
+  "total_records": 1460,
+  "saleprice_mean": 180921.2,
+  "saleprice_median": 163000.0,
+  "saleprice_std": 79442.5,
+  "saleprice_skew": 1.8829,
+  "top_correlations": {
+    "SalePrice": 1.0,
+    "OverallQual": 0.791,
+    "GrLivArea": 0.7086,
+    "GarageCars": 0.6404,
+    "GarageArea": 0.6234,
+    "TotalBsmtSF": 0.6136,
+    "1stFlrSF": 0.6059,
+    "FullBath": 0.5607,
+    "TotRmsAbvGrd": 0.5337,
+    "YearBuilt": 0.5229
+  },
+  "top_15_features": {
+    "TotalArea": 0.4318,
+    "OverallQual": 0.3391,
+    "2ndFlrSF": 0.0276,
+    "YearBuilt": 0.0153,
+    "BsmtFinSF1": 0.0144,
+    "LotArea": 0.0135,
+    "HouseAge": 0.0132,
+    "GrLivArea": 0.013,
+    "GarageArea": 0.0108,
+    "KitchenQual_Num": 0.0105,
+    "BsmtQual_Num": 0.01,
+    "YearRemodAdd": 0.0091,
+    "BsmtUnfSF": 0.0086,
+    "LotFrontage": 0.0084,
+    "OverallCond": 0.0073
+  },
+  "pca_explained_variance_ratio": [
+    0.3579,
+    0.1253
+  ],
+  "processed_shape": [
+    1460,
+    89
+  ]
+}
