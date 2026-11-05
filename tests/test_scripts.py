@@ -34,6 +34,9 @@ if VENV_BIN.is_dir():
     if str(VENV_BIN) not in existing_path:
         os.environ["PATH"] = f"{VENV_BIN}:{existing_path}"
 
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
 from scripts import build_reports, run_notebooks
 
 
@@ -140,6 +143,13 @@ class TestBuildReportsScript(unittest.TestCase):
         raw_html = '<img src="figures/grafico.png" alt="Grafico">'
         normalized = build_reports.normalize_image_paths(raw_html)
         self.assertEqual(normalized, '<img src="evidence/figures/grafico.png" alt="Grafico">')
+
+        raw_html_dotslash = '<img src="./figures/grafico2.png" alt="Grafico 2">'
+        normalized_dotslash = build_reports.normalize_image_paths(raw_html_dotslash)
+        self.assertEqual(
+            normalized_dotslash,
+            '<img src="evidence/figures/grafico2.png" alt="Grafico 2">',
+        )
 
     def test_build_html_document(self):
         doc = build_reports.build_html_document("<p>Conteúdo</p>", title="Teste")

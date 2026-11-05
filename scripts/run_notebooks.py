@@ -39,6 +39,9 @@ if VENV_BIN.is_dir():
     if str(VENV_BIN) not in existing_path:
         os.environ["PATH"] = f"{VENV_BIN}:{existing_path}"
 
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
 
 def discover_notebooks(directory: Path | str | None = None) -> list[Path]:
     """Discover all .ipynb files in target directory, excluding checkpoints."""

@@ -42,6 +42,9 @@ if VENV_BIN.is_dir():
     if str(VENV_BIN) not in existing_path:
         os.environ["PATH"] = f"{VENV_BIN}:{existing_path}"
 
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
 REPORT_TARGETS = [
     ("Entrega_1_UA1_UA2_Relatorio_Tecnico.md", "Entrega_1_UA1_UA2_Relatorio_Tecnico.pdf"),
     ("Entrega_2_UA3_UA4_Relatorio_Tecnico.md", "Entrega_2_UA3_UA4_Relatorio_Tecnico.pdf"),
@@ -345,9 +348,9 @@ def markdown_to_html(markdown_content: str) -> str:
 def normalize_image_paths(html: str) -> str:
     """Ensure image src references resolve properly relative to reports directory.
 
-    Replaces src='figures/...' with src='evidence/figures/...' if evidence/figures exists.
+    Replaces src='figures/...' or src='./figures/...' with src='evidence/figures/...'.
     """
-    pattern = re.compile(r'src=["\']figures/([^"\']+)["\']')
+    pattern = re.compile(r'src=["\'](?:\./)?figures/([^"\']+)["\']')
     return pattern.sub(r'src="evidence/figures/\1"', html)
 
 
