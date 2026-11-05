@@ -18,4 +18,5 @@ venv:
 	python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
 
 clean:
-	rm -rf __pycache__ .ipynb_checkpoints *.egg-info
+	find . -type d \( -name __pycache__ -o -name .ipynb_checkpoints -o -name "*.egg-info" \) -exec rm -rf {} +
+
