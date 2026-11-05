@@ -1,0 +1,24 @@
+{
+  "total_passengers": 891,
+  "survivors": 342,
+  "non_survivors": 549,
+  "survival_rate": 0.3838,
+  "survival_by_sex": {
+    "female": 0.742,
+    "male": 0.1889
+  },
+  "survival_by_pclass": {
+    "1": 0.6296,
+    "2": 0.4728,
+    "3": 0.2424
+  },
+  "missing_counts_before": {
+    "Cabin": 687,
+    "Age": 177,
+    "Embarked": 2
+  },
+  "processed_shape": [
+    891,
+    11
+  ]
+}
