@@ -19,24 +19,13 @@ REPORTS_DIR = PROJECT_ROOT / "reports"
 EVIDENCE_DIR = REPORTS_DIR / "evidence"
 
 # Prioritize virtualenv site-packages if running with system python
-VENV_SITE_PACKAGES = (
-    PROJECT_ROOT
-    / ".venv"
-    / "lib"
-    / f"python{sys.version_info.major}.{sys.version_info.minor}"
-    / "site-packages"
-)
+venv_lib = PROJECT_ROOT / ".venv" / "lib"
+if venv_lib.exists():
+    for sp in venv_lib.glob("python*/site-packages"):
+        if sp.exists() and str(sp) not in sys.path:
+            sys.path.insert(0, str(sp))
+
 VENV_BIN = PROJECT_ROOT / ".venv" / "bin"
-
-if VENV_SITE_PACKAGES.is_dir():
-    if str(VENV_SITE_PACKAGES) not in sys.path:
-        sys.path.insert(0, str(VENV_SITE_PACKAGES))
-    existing_pp = os.environ.get("PYTHONPATH", "")
-    if str(VENV_SITE_PACKAGES) not in existing_pp:
-        os.environ["PYTHONPATH"] = (
-            f"{VENV_SITE_PACKAGES}:{existing_pp}" if existing_pp else str(VENV_SITE_PACKAGES)
-        )
-
 if VENV_BIN.is_dir():
     existing_path = os.environ.get("PATH", "")
     if str(VENV_BIN) not in existing_path:

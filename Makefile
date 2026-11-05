@@ -1,22 +1,24 @@
+PYTHON ?= $(shell if [ -f .venv/bin/python ]; then echo .venv/bin/python; else echo python3; fi)
+
 .PHONY: all run test reports notebooks venv clean
 
 all: run test
 
 run:
-	python3 -m scripts.run_notebooks && python3 -m scripts.build_reports
+	$(PYTHON) -m scripts.run_notebooks && $(PYTHON) -m scripts.build_reports
 
 test:
-	python3 -m unittest discover -s tests -v
+	$(PYTHON) -m unittest discover -s tests -v
 
 reports:
-	python3 -m scripts.build_reports
+	$(PYTHON) -m scripts.build_reports
 
 notebooks:
-	python3 -m scripts.run_notebooks
+	$(PYTHON) -m scripts.run_notebooks
 
 venv:
 	python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
 
 clean:
-	find . -type d \( -name __pycache__ -o -name .ipynb_checkpoints -o -name "*.egg-info" \) -exec rm -rf {} +
-
+	find . -type d \( -name __pycache__ -o -name .ipynb_checkpoints -o -name "*.egg-info" -o -name ".pytest_cache" \) -exec rm -rf {} +
+	rm -rf .test_*
