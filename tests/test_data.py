@@ -1,6 +1,7 @@
 import csv
 import hashlib
 import json
+import math
 import pathlib
 import unittest
 
@@ -151,6 +152,33 @@ class TestProcessedHousePricesDataset(unittest.TestCase):
         structural_cols = ["Alley", "PoolQC", "Fence", "FireplaceQu", "GarageType"]
         for col in structural_cols:
             self.assertIn(col, header, f"Must contain structural column '{col}'")
+
+    def test_processed_house_prices_feature_values(self):
+        with open(HOUSE_PRICES_FEATURES_PATH, mode="r", encoding="utf-8") as f:
+            reader = csv.DictReader(f)
+            rows = list(reader)
+
+        self.assertEqual(len(rows), 1460)
+        for i, row in enumerate(rows):
+            house_age = float(row["HouseAge"])
+            total_area = float(row["TotalArea"])
+            is_remod = int(row["IsRemodeled"])
+            exter_qual = int(row["ExterQual_Num"])
+            bsmt_qual = int(row["BsmtQual_Num"])
+            kitchen_qual = int(row["KitchenQual_Num"])
+            pc1 = float(row["PC1"])
+            pc2 = float(row["PC2"])
+            sale_price = float(row["SalePrice"])
+
+            self.assertGreaterEqual(house_age, 0.0, f"Row {i}: HouseAge must be non-negative")
+            self.assertGreater(total_area, 0.0, f"Row {i}: TotalArea must be positive")
+            self.assertIn(is_remod, (0, 1), f"Row {i}: IsRemodeled must be 0 or 1")
+            self.assertIn(exter_qual, (1, 2, 3, 4, 5), f"Row {i}: ExterQual_Num must be 1-5")
+            self.assertIn(bsmt_qual, (0, 1, 2, 3, 4, 5), f"Row {i}: BsmtQual_Num must be 0-5")
+            self.assertIn(kitchen_qual, (1, 2, 3, 4, 5), f"Row {i}: KitchenQual_Num must be 1-5")
+            self.assertGreater(sale_price, 0.0, f"Row {i}: SalePrice must be positive")
+            self.assertFalse(math.isnan(pc1), f"Row {i}: PC1 must not be NaN")
+            self.assertFalse(math.isnan(pc2), f"Row {i}: PC2 must not be NaN")
 
     def test_house_prices_metrics_and_figures(self):
         self.assertTrue(
