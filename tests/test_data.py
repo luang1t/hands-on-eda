@@ -79,6 +79,7 @@ class TestProcessedTitanicDataset(unittest.TestCase):
         data_rows = reader[1:]
 
         self.assertEqual(len(data_rows), 891, "titanic_clean.csv must contain exactly 891 rows")
+        self.assertEqual(len(header), 11, "titanic_clean.csv must contain exactly 11 columns")
         self.assertIn("Survived", header, "titanic_clean.csv must retain the target column 'Survived'")
 
         # Ensure no null/empty string cells exist
