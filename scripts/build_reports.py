@@ -8,6 +8,7 @@ using WeasyPrint and clean CSS typography.
 from __future__ import annotations
 
 import argparse
+import base64
 import json
 import os
 from pathlib import Path
@@ -42,18 +43,12 @@ REPORT_TARGETS = [
 CSS_STYLE = """
 @page {
     size: A4;
-    margin: 20mm 15mm 20mm 15mm;
+    margin: 21mm 25mm 20mm 25mm;
     @bottom-center {
         content: counter(page);
         font-size: 9pt;
         font-family: 'DejaVu Sans', 'Liberation Sans', sans-serif;
         color: #555555;
-    }
-    @top-right {
-        content: "Hands-on EDA | Relatório Técnico";
-        font-size: 8pt;
-        font-family: 'DejaVu Sans', 'Liberation Sans', sans-serif;
-        color: #777777;
     }
 }
 
@@ -61,14 +56,15 @@ body {
     font-family: 'Liberation Serif', 'DejaVu Serif', serif;
     font-size: 10.5pt;
     line-height: 1.55;
-    color: #222222;
+    color: #15283a;
     text-align: justify;
-    hyphens: auto;
+    hyphens: manual;
 }
 
 h1, h2, h3, h4, h5, h6 {
     font-family: 'DejaVu Sans', 'Liberation Sans', sans-serif;
-    color: #1a1a1a;
+    color: #183954;
+    text-align: left;
     page-break-after: avoid;
     break-after: avoid;
     font-weight: 600;
@@ -76,18 +72,18 @@ h1, h2, h3, h4, h5, h6 {
 
 h1 {
     font-size: 18pt;
-    border-bottom: 2px solid #204a87;
-    padding-bottom: 4px;
+    border: 0;
+    padding: 0;
     margin-top: 0;
-    margin-bottom: 14px;
+    margin-bottom: 12px;
 }
 
 h2 {
     font-size: 13.5pt;
-    border-bottom: 1px solid #d0d7de;
-    padding-bottom: 3px;
+    border: 0;
+    padding: 0;
     margin-top: 18px;
-    margin-bottom: 10px;
+    margin-bottom: 9px;
 }
 
 h3 {
@@ -95,6 +91,22 @@ h3 {
     margin-top: 14px;
     margin-bottom: 6px;
 }
+
+.subtitle {
+    font-family: 'DejaVu Sans', 'Liberation Sans', sans-serif;
+    font-size: 12pt;
+    color: #183954;
+    text-align: left;
+    margin: 0 0 20px;
+}
+
+.metadata {
+    text-align: left;
+    line-height: 1.4;
+    margin-bottom: 14px;
+}
+
+a { color: #1d5d81; }
 
 p {
     margin-top: 0;
@@ -106,35 +118,32 @@ table {
     border-collapse: collapse;
     margin: 12px 0;
     font-size: 9pt;
-    font-family: 'DejaVu Sans', 'Liberation Sans', sans-serif;
+    font-family: 'Liberation Serif', 'DejaVu Serif', serif;
     page-break-inside: avoid;
     break-inside: avoid;
 }
 
 th, td {
-    border: 1px solid #d0d7de;
-    padding: 6px 9px;
+    border: 0;
+    border-bottom: 1px solid #c7d3dc;
+    padding: 4px 5px;
     text-align: left;
     vertical-align: top;
 }
 
 th {
-    background-color: #f6f8fa;
+    background-color: #eaf0f4;
+    font-family: 'DejaVu Sans', 'Liberation Sans', sans-serif;
     font-weight: 600;
-    color: #1f2328;
-}
-
-tr:nth-child(even) td {
-    background-color: #fafbfc;
+    color: #15283a;
 }
 
 code {
     font-family: 'DejaVu Sans Mono', monospace;
     font-size: 8.5pt;
-    background-color: #f6f8fa;
-    padding: 1px 4px;
-    border-radius: 3px;
-    border: 1px solid #e1e4e8;
+    background-color: transparent;
+    padding: 0;
+    border: 0;
 }
 
 pre {
@@ -259,8 +268,8 @@ def _generate_house_prices_metrics_table(evidence_path: Path) -> str:
         f"| Segunda Maior Correlação com Preço | GrLivArea (r = {top_corr.get('GrLivArea', 0.0):.4f}) |",
         f"| Variável Mais Importante (Random Forest) | TotalArea ({top_feat.get('TotalArea', 0.0) * 100:.2f}%) |",
         f"| Segunda Variável Mais Importante | OverallQual ({top_feat.get('OverallQual', 0.0) * 100:.2f}%) |",
-        f"| Variância Explicada pelo PC1 | {pc1_pct:.2f}% (Tamanho e Construtora) |",
-        f"| Variância Explicada pelo PC2 | {pc2_pct:.2f}% (Idade vs Conservação) |",
+        f"| Variância Explicada pelo PC1 | {pc1_pct:.2f}% |",
+        f"| Variância Explicada pelo PC2 | {pc2_pct:.2f}% |",
         f"| Variância Retida no Plano (PC1 + PC2) | {pca_total:.2f}% |",
         f"| Dimensões do Dataset com Features | {shape[0]} linhas × {shape[1]} colunas |",
     ]
@@ -392,10 +401,26 @@ def compile_markdown_to_pdf(
     return target_pdf
 
 
+def export_notebook_figures(notebook_path: Path, figures_dir: Path) -> None:
+    """Export Titanic notebook plots for the report appendix."""
+    notebook = json.loads(notebook_path.read_text(encoding="utf-8"))
+    figures_dir.mkdir(parents=True, exist_ok=True)
+    index = 0
+    for cell in notebook["cells"]:
+        for output in cell.get("outputs", []):
+            image = output.get("data", {}).get("image/png")
+            if image:
+                index += 1
+                encoded = "".join(image) if isinstance(image, list) else image
+                (figures_dir / f"titanic_notebook_{index:02d}.png").write_bytes(base64.b64decode(encoded))
+
+
 def build_all_reports(reports_dir: Path | str | None = None) -> list[Path]:
     """Find and compile canonical reports if they exist."""
     rep_dir = Path(reports_dir).resolve() if reports_dir else REPORTS_DIR
     compiled: list[Path] = []
+    if rep_dir == REPORTS_DIR:
+        export_notebook_figures(PROJECT_ROOT / "notebooks" / "01_analise_titanic.ipynb", rep_dir / "evidence" / "figures")
 
     print("[build_reports] Iniciando compilação de relatórios técnicos...")
     for md_name, pdf_name in REPORT_TARGETS:

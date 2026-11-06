@@ -28,6 +28,13 @@ if str(PROJECT_ROOT) not in sys.path:
 REPORTS_DIR = PROJECT_ROOT / "reports"
 
 
+class TestReportLinks(unittest.TestCase):
+    def test_notebook_links_are_public_urls(self):
+        for report in REPORTS_DIR.glob("Entrega_*_Relatorio_Tecnico.md"):
+            content = report.read_text(encoding="utf-8")
+            self.assertIn("https://github.com/luang1t/hands-on-eda/blob/main/notebooks/", content)
+
+
 class TestTitanicTechnicalReport(unittest.TestCase):
     """Validation suite for Entrega 1 (Titanic UA1/UA2) report."""
 

@@ -73,6 +73,16 @@ class TestRunNotebooksScript(unittest.TestCase):
 
 
 class TestBuildReportsScript(unittest.TestCase):
+    def test_export_notebook_figures(self):
+        import base64
+        import json
+        with tempfile.TemporaryDirectory() as tmpdir:
+            root = Path(tmpdir)
+            notebook = root / "test.ipynb"
+            notebook.write_text(json.dumps({"cells": [{"outputs": [{"data": {"image/png": base64.b64encode(b"image").decode()}}]}]}))
+            build_reports.export_notebook_figures(notebook, root / "figures")
+            self.assertEqual((root / "figures" / "titanic_notebook_01.png").read_bytes(), b"image")
+
     def test_css_styling_structure(self):
         css = build_reports.CSS_STYLE
         self.assertIn("@page", css)

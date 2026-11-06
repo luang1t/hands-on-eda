@@ -27,3 +27,8 @@ Thumbs.db
 # Project local artifacts
 .superpowers/
 .test_*
+
+# Local credentials
+.env
+.env.*
+!.env.example

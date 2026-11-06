@@ -25,6 +25,15 @@ TITANIC_SHA256 = "4a437fde05fe5264e1701a7387ac6fb75393772ba38bb2c9c566405af5af4b
 HOUSE_PRICES_SHA256 = "1e18addf81e5e4d347cc17ee6075bbe4a42b7fa26b9e5b063e8f692a5f929d41"
 
 
+class TestNotebookOutputs(unittest.TestCase):
+    def test_outputs_do_not_expose_local_project_path(self):
+        for path in (ROOT_DIR / "notebooks").glob("*.ipynb"):
+            notebook = json.loads(path.read_text(encoding="utf-8"))
+            for cell in notebook["cells"]:
+                output = json.dumps(cell.get("outputs", []), ensure_ascii=False)
+                self.assertNotIn(str(ROOT_DIR), output, f"Caminho local exposto em {path.name}")
+
+
 class TestRawDatasets(unittest.TestCase):
     def test_raw_directory_and_readme_exist(self):
         self.assertTrue(RAW_DATA_DIR.is_dir(), "data/raw directory must exist")
@@ -179,6 +188,15 @@ class TestProcessedHousePricesDataset(unittest.TestCase):
             self.assertGreater(sale_price, 0.0, f"Row {i}: SalePrice must be positive")
             self.assertFalse(math.isnan(pc1), f"Row {i}: PC1 must not be NaN")
             self.assertFalse(math.isnan(pc2), f"Row {i}: PC2 must not be NaN")
+
+    def test_feature_ranking_covers_original_and_engineered_predictors(self):
+        with open(HOUSE_PRICES_PATH, encoding="utf-8") as f:
+            original = set(next(csv.reader(f))) - {"Id", "SalePrice"}
+        metrics = json.loads(HOUSE_PRICES_METRICS_PATH.read_text(encoding="utf-8"))
+        ranking = metrics["feature_importances"]
+        self.assertTrue(original.issubset(ranking))
+        self.assertTrue({"HouseAge", "TotalArea", "IsRemodeled"}.issubset(ranking))
+        self.assertAlmostEqual(sum(ranking.values()), 1.0, places=3)
 
     def test_house_prices_metrics_and_figures(self):
         self.assertTrue(
