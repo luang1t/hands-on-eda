@@ -11,7 +11,7 @@
 
 ## 1. Introdução
 
-A base Titanic contém 891 passageiros e 12 colunas. O notebook original do colega carregava o conjunto de Yasserh no Kaggle (YASSERH, s.d.). Nesta versão, a análise usa a cópia `data/raw/titanic.csv`, idêntica ao arquivo disponibilizado por Data Science Dojo no GitHub (DATA SCIENCE DOJO, s.d.). Não foi verificada a igualdade entre as duas fontes. O objetivo é descrever a sobrevivência, examinar relações entre variáveis e preparar uma versão numérica para análises posteriores. Os registros são uma amostra do conjunto de passageiros; as associações observadas não estabelecem causas.
+A base Titanic contém 891 passageiros e 12 colunas. O notebook original do colega carregava o conjunto de Yasserh no Kaggle (YASSERH, s.d.). Nesta versão, a análise usa a cópia `data/raw/titanic.csv`, idêntica ao arquivo disponibilizado por Data Science Dojo no GitHub (DATA SCIENCE DOJO, s.d.). A versão do Kaggle consultada em 6 nov. 2026 tem os mesmos dados e a mesma ordem; os arquivos diferem apenas nas quebras de linha (CRLF e LF). O objetivo é descrever a sobrevivência, examinar relações entre variáveis e preparar uma versão numérica para análises posteriores. Os registros são uma amostra do conjunto de passageiros; as associações observadas não estabelecem causas.
 
 ## 2. Classificação e qualidade dos dados
 

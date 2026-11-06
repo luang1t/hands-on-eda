@@ -15,7 +15,9 @@ As URLs abaixo foram consultadas em 6 nov. 2026; os arquivos remotos tinham os m
 
 ### Titanic
 - Source URL: https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv
-- Original notebook source: https://www.kaggle.com/datasets/yasserh/titanic-dataset (equality with the local copy not checked)
+- Original notebook source: https://www.kaggle.com/datasets/yasserh/titanic-dataset
+- Comparison on 6 Nov 2026: the Kaggle CSV and this copy have identical content after normalizing line endings. Kaggle uses CRLF and this copy uses LF; both contain the same 891 rows and 12 columns.
+- SHA-256 of the Kaggle CSV: `7d118fef8b6ccf7f81111877bc388536f7b1e498a655e3d649d19aaa010e9f6f`.
 - Target variable: Survived (binary classification)
 - Dimensions: 891 observation rows, 12 feature columns
 
