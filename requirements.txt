@@ -1,0 +1,11 @@
+pandas
+numpy
+matplotlib
+seaborn
+scikit-learn
+markdown-it-py
+weasyprint
+nbformat
+nbconvert
+ipykernel
+ipywidgets
