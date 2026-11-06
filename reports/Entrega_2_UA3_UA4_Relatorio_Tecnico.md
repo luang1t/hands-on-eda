@@ -11,7 +11,7 @@
 
 ## 1. Dados e objetivo
 
-A base de treinamento House Prices reúne 1.460 vendas residenciais em Ames, Iowa, com 79 atributos explicativos, identificador e preço de venda. A análise cria atributos, examina sua relação com `SalePrice`, compara importâncias em uma floresta aleatória e usa PCA para visualizar dimensões numéricas.
+A cópia de treinamento House Prices usada neste trabalho foi obtida do GitHub (KRISH NAIK, s.d.) e contém 1.460 registros, 79 atributos explicativos, identificador e preço de venda. A base Ames original é descrita por De Cock (2011). A análise cria atributos, examina sua relação com `SalePrice`, compara importâncias em uma floresta aleatória e usa PCA para visualizar dimensões numéricas.
 
 ## 2. Distribuição e correlações
 
@@ -41,11 +41,11 @@ Os atributos derivados resumem informação já disponível. Preservar as coluna
 
 ![Qualidade geral e preço](evidence/figures/house_prices_overall_qual_boxplot.png)
 
-Nos campos `Alley`, `PoolQC`, `Fence`, `FireplaceQu` e `GarageType`, a documentação usa ausência para indicar que o imóvel não possui o recurso; o notebook cria categorias explícitas. Para o ranking, outras categorias ausentes recebem um marcador e valores numéricos recebem a mediana. O CSV exportado conserva ausências em outras colunas: ele é um conjunto enriquecido para exploração, não uma matriz inteiramente imputada. A causa de cada ausência remanescente não foi determinada.
+Nos campos `Alley`, `PoolQC`, `Fence`, `FireplaceQu` e `GarageType`, a documentação de Ames usa ausência para indicar que o imóvel não possui o recurso (DE COCK, s.d.); o notebook cria categorias explícitas. Para o ranking, outras categorias ausentes recebem um marcador e valores numéricos recebem a mediana. O CSV exportado conserva ausências em outras colunas: ele é um conjunto enriquecido para exploração, não uma matriz inteiramente imputada. A causa de cada ausência remanescente não foi determinada.
 
 ## 5. Seleção de características
 
-O Random Forest usa os preditores originais e criados, excluindo `Id`. A importância das categorias codificadas é somada por variável de origem. Na amostra, `TotalArea` responde por 42,87% da redução de impureza, `OverallQual` por 33,76% e `HouseAge` por 1,18%; `IsRemodeled` tem cerca de 0,05%. A medida depende dos demais atributos presentes: áreas e qualidade correlacionadas podem dividir importância. Muitas categorias ou pontos de corte também podem favorecer um atributo.
+O Random Forest, implementado com scikit-learn (SCIKIT-LEARN, s.d.), usa os preditores originais e criados, excluindo `Id`. A importância das categorias codificadas é somada por variável de origem. Na amostra, `TotalArea` responde por 42,87% da redução de impureza, `OverallQual` por 33,76% e `HouseAge` por 1,18%; `IsRemodeled` tem cerca de 0,05%. A medida depende dos demais atributos presentes: áreas e qualidade correlacionadas podem dividir importância. Muitas categorias ou pontos de corte também podem favorecer um atributo.
 
 ![Importância das características](evidence/figures/house_prices_feature_importance.png)
 
@@ -68,8 +68,10 @@ O conjunto enriquecido `data/processed/house_prices_features.csv` mantém 1.460 
 
 ## Referências
 
-DE COCK, Dean. Ames, Iowa: Alternative to the Boston Housing Data as an End of Semester Regression Project. *Journal of Statistics Education*, v. 19, n. 3, 2011.
+DE COCK, Dean. *Ames, Iowa: Alternative to the Boston Housing Data as an End of Semester Regression Project*. Journal of Statistics Education, v. 19, n. 3, 2011. Disponível em: https://jse.amstat.org/v19n3/decock.pdf. Acesso em: 6 nov. 2026.
 
-KAGGLE. House Prices: Advanced Regression Techniques. Disponível em: https://www.kaggle.com/competitions/house-prices-advanced-regression-techniques. Acesso em: 5 nov. 2026.
+DE COCK, Dean. *Data documentation: Ames Housing*. Disponível em: https://jse.amstat.org/v19n3/decock/DataDocumentation.txt. Acesso em: 6 nov. 2026.
 
-PEDREGOSA, Fabian et al. Scikit-learn: Machine Learning in Python. *Journal of Machine Learning Research*, v. 12, p. 2825-2830, 2011.
+KRISH NAIK. *train.csv*. Advanced House Price Prediction. Disponível em: https://raw.githubusercontent.com/krishnaik06/Advanced-House-Price-Prediction-/master/train.csv. Acesso em: 6 nov. 2026.
+
+SCIKIT-LEARN. *RandomForestRegressor*. Disponível em: https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestRegressor.html. Acesso em: 6 nov. 2026.

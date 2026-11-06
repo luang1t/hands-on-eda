@@ -35,6 +35,27 @@ class TestReportLinks(unittest.TestCase):
             self.assertIn("https://github.com/luang1t/hands-on-eda/blob/main/notebooks/", content)
 
 
+class TestProvenance(unittest.TestCase):
+    def test_reports_identify_actual_data_sources(self):
+        sources = {
+            "Entrega_1_UA1_UA2_Relatorio_Tecnico.md": "https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv",
+            "Entrega_2_UA3_UA4_Relatorio_Tecnico.md": "https://raw.githubusercontent.com/krishnaik06/Advanced-House-Price-Prediction-/master/train.csv",
+        }
+        for name, url in sources.items():
+            content = (REPORTS_DIR / name).read_text(encoding="utf-8")
+            body, references = content.split("## Referências", 1)
+            self.assertIn(url, references)
+            self.assertNotIn("Acesso em: 5 nov. 2026", references)
+            self.assertIn("cópia", body.lower())
+
+    def test_original_titanic_historical_sources_are_linked(self):
+        import json
+        notebook = json.loads((PROJECT_ROOT / "notebooks/01_analise_titanic.ipynb").read_text(encoding="utf-8"))
+        text = "".join("".join(cell.get("source", [])) for cell in notebook["cells"])
+        self.assertIn("https://www.encyclopedia-titanica.org/titanic-survivor/martha-stone.html", text)
+        self.assertIn("https://www.encyclopedia-titanica.org/titanic-survivor/amelia-icard.html", text)
+
+
 class TestTitanicTechnicalReport(unittest.TestCase):
     """Validation suite for Entrega 1 (Titanic UA1/UA2) report."""
 

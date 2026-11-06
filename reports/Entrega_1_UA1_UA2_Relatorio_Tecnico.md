@@ -11,7 +11,7 @@
 
 ## 1. Introdução
 
-A base Titanic contém 891 passageiros e 12 colunas. O objetivo é descrever a sobrevivência, examinar relações entre variáveis e preparar uma versão numérica para análises posteriores. Os registros são uma amostra do conjunto de passageiros; as associações observadas não estabelecem causas.
+A base Titanic contém 891 passageiros e 12 colunas. O notebook original do colega carregava o conjunto de Yasserh no Kaggle (YASSERH, s.d.). Nesta versão, a análise usa a cópia `data/raw/titanic.csv`, idêntica ao arquivo disponibilizado por Data Science Dojo no GitHub (DATA SCIENCE DOJO, s.d.). Não foi verificada a igualdade entre as duas fontes. O objetivo é descrever a sobrevivência, examinar relações entre variáveis e preparar uma versão numérica para análises posteriores. Os registros são uma amostra do conjunto de passageiros; as associações observadas não estabelecem causas.
 
 ## 2. Classificação e qualidade dos dados
 
@@ -50,7 +50,7 @@ O mapa de calor resume associações lineares e deve ser interpretado junto dos 
 
 ## 4. Ausências, valores extremos e transformações
 
-Para `Age`, a mediana por sexo e classe preserva diferenças entre grupos melhor que uma mediana única, embora reduza a variabilidade; `IdadeImputada` sinaliza as 177 substituições. `Embarked` recebe a moda, uma escolha simples para duas observações, mas não confirma o porto real. `Cabin` é substituída por `TemCabine`, indicador de registro, pois imputar um código específico não teria suporte. A ausência pode refletir o processo de registro, sem comprovar que o passageiro não tinha cabine.
+Para `Age`, a mediana por sexo e classe preserva diferenças entre grupos melhor que uma mediana única, embora reduza a variabilidade; `IdadeImputada` sinaliza as 177 substituições. `Embarked` recebe a moda para duas observações. As biografias de Martha Stone e Amélie Icard registram Southampton como porto de embarque (ENCYCLOPEDIA TITANICA, s.d.a; s.d.b). `Cabin` é substituída por `TemCabine`, indicador de registro, pois imputar um código específico não teria suporte. A ausência pode refletir o processo de registro, sem comprovar que o passageiro não tinha cabine.
 
 A regra de 1,5 intervalo interquartil sinalizou 11 valores em `Age`, 116 em `Fare`, 46 em `SibSp` e 213 em `Parch`. Em `Parch`, o intervalo interquartil é zero, então a regra sinaliza qualquer valor positivo. Valores sinalizados não são necessariamente erros. As linhas foram mantidas por não haver evidência suficiente para removê-las.
 
@@ -58,7 +58,7 @@ A regra de 1,5 intervalo interquartil sinalizou 11 valores em `Age`, 116 em `Far
 
 O notebook divide `Fare` pela quantidade de registros com o mesmo `Ticket` e aplica `log1p`, reduzindo a influência de tarifas altas. O resultado é uma estimativa exploratória: tarifa repetida não comprova o preço individual, e a amostra pode omitir outros ocupantes do bilhete. `SibSp` e `Parch` formam faixas de tamanho familiar. `PassengerId`, `Name`, `Ticket` e as colunas substituídas são retirados da matriz final.
 
-`Sex`, `Embarked` e a faixa familiar recebem One-Hot Encoding, que não impõe uma ordem artificial às categorias nominais; a primeira categoria serve de referência. `Pclass` mantém a ordem. `Age` e a tarifa transformada são padronizadas por média e desvio padrão, equivalentes ao cálculo do `StandardScaler`. Essa escala ajuda modelos baseados em distância ou regularização; árvores não precisam dela.
+`Sex`, `Embarked` e a faixa familiar recebem One-Hot Encoding, que não impõe uma ordem artificial às categorias nominais; a primeira categoria serve de referência. `Pclass` mantém a ordem. `Age` e a tarifa transformada são padronizadas por média e desvio padrão, equivalentes ao cálculo do `StandardScaler` descrito pela documentação do scikit-learn (SCIKIT-LEARN, s.d.). Essa escala ajuda modelos baseados em distância ou regularização; árvores não precisam dela.
 
 ## 5. Resultado e limites
 
@@ -69,9 +69,15 @@ O arquivo `data/processed/titanic_clean.csv` contém 891 linhas e 11 colunas num
 
 ## Referências
 
-KAGGLE. Titanic Dataset. Disponível em: https://www.kaggle.com/datasets/yasserh/titanic-dataset. Acesso em: 5 nov. 2026.
+DATA SCIENCE DOJO. *titanic.csv*. Disponível em: https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv. Acesso em: 6 nov. 2026.
 
-PEDREGOSA, Fabian et al. Scikit-learn: Machine Learning in Python. *Journal of Machine Learning Research*, v. 12, p. 2825-2830, 2011.
+ENCYCLOPEDIA TITANICA. *Martha M. Stone*. Disponível em: https://www.encyclopedia-titanica.org/titanic-survivor/martha-stone.html. Acesso em: 6 nov. 2026. (s.d.a).
+
+ENCYCLOPEDIA TITANICA. *Rose Amélie Icard*. Disponível em: https://www.encyclopedia-titanica.org/titanic-survivor/amelia-icard.html. Acesso em: 6 nov. 2026. (s.d.b).
+
+SCIKIT-LEARN. *StandardScaler*. Disponível em: https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.StandardScaler.html. Acesso em: 6 nov. 2026.
+
+YASSERH. *Titanic Dataset*. Kaggle. Disponível em: https://www.kaggle.com/datasets/yasserh/titanic-dataset. Acesso em: 6 nov. 2026.
 
 ## Apêndice: demais gráficos do notebook
 
